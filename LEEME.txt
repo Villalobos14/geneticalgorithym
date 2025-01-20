@@ -1,0 +1,109 @@
+Caso de Prueba 1
+
+Función: (x**3 * sin(x))/100 + x**2 *cos(x)
+Población inicial: 2
+Población máxima: 4
+Resolución: 0.05
+Límites: [-4, 4]
+Probabilidad de mutación del individuo: 0.32
+Probabilidad de mutación del gen: 0.23
+Número de generaciones: 50
+Tipo de problema: Maximización
+
+
+Caso de Prueba 3 (documento):
+Función: (x**3 * sin(x))/100 + x**2 *cos(x)
+Población inicial: 4
+Población máxima: 40
+Resolución: 0.05
+Límites: [-4, 12]
+Probabilidad de mutación del individuo: 0.32
+Probabilidad de mutación del gen: 0.23
+Número de generaciones: 50
+Tipo de problema: Maximización
+
+
+
+Caso de Prueba 3
+
+Función: (x**3 * sin(x))/100 + x**2 *cos(x)
+Población inicial: 2
+Población máxima: 4
+Resolución: 0.05
+Límites: [-4, 4]
+Probabilidad de mutación del individuo: 0.32
+Probabilidad de mutación del gen: 0.23
+Número de generaciones: 50
+Tipo de problema: Minimizacion
+
+
+
+Caso de Prueba 4
+
+(0.001)*(x**3)*(1-cos(5*x))
+Población inicial: 5
+Población máxima: 20
+Resolución: 0.1
+Límites: [-6, -8]
+Probabilidad de mutación del individuo: 0.5
+Probabilidad de mutación del gen: 0.4
+Número de generaciones: 50
+Tipo de problema: Minimizacion
+
+
+
+Caso de Prueba 4
+
+x*cos(x)*sin(x)
+Población inicial: 10
+Población máxima: 20
+Resolución: 0.1
+Límites: [-5, 5]
+Probabilidad de mutación del individuo: 0.5
+Probabilidad de mutación del gen: 0.4
+Número de generaciones: 50
+Tipo de problema: Minimizacion
+
+
+Caso de prueba 5 
+((x)*cos(2*x))-((x)*sin(3*x))
+Población inicial: 5
+Población máxima: 20
+Resolución: 0.1
+Límites: [0, 10]
+Probabilidad de mutación del individuo: 0.5
+Probabilidad de mutación del gen: 0.4
+Número de generaciones: 50
+Tipo de problema: Maximizacion
+
+
+
+((x**2 * cos(x))/100) + (x**2) *(sin(x))
+
+
+
+6 * log(0.1 + abs(x)**3) + cos(x**2)
+
+
+6 * log(0.1 + abs(x)**3) * cos(x**2)
+
+
+log(0.5 + abs(x))*sin(x)+3
+
+
+sin(x)*cos(x)*log(1+abs(x)**(7/5))
+sin(x)*cos(x)*log(1+(0.1 + abs(x)**1.4))
+
+(log(1+x)-log(x**2+0.5))*sin(x)
+
+
+log(1+abs(x)**3)*cos(x)-sin(x)*log(2+abs(x)**5)
+
+
+
+
+
+
+
+
+
