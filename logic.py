@@ -2,15 +2,11 @@ import math
 import random
 import tkinter as tk
 from sympy import symbols, lambdify
-
-# IMPORTA TUS MÓDULOS EXISTENTES (graphs, video, etc.)
 from graphs.graphic import generar_graficas
 from video import generar_video
 from graphs.graphic2 import generar_segunda_grafica
 
-# =============================================================================
-#                                 CLASES
-# =============================================================================
+
 
 class Individuo:
     identificador = 0
@@ -26,7 +22,7 @@ class Individuo:
 
 
 class Data:
-    # Parámetros relacionados con la representación y el rango
+   
     rango_punto_cruza = 1
     rango = 0
     rango_numero = 0
@@ -36,26 +32,26 @@ class Data:
     limite_superior = 0
     num_bits = 1
 
-    # Parámetros poblacionales
+    
     poblacion_inicial = 0
     poblacion_maxima = 0
     poblacion_general = []
 
-    # Probabilidades y número de generaciones
+   
     prob_mutacion_ind = 0
     prob_mutacion_gen = 0
     num_generaciones = 0
     generacion_actual = 0
 
-    # Tipo de problema (Max/Min) y función a optimizar
+    
     tipo_problema_value = ""
     funcion = ""
 
-    # Estrategias seleccionadas dinámicamente
-    estrategia_formacion = "A6"  # Por defecto
-    estrategia_cruce = "C1"      # Por defecto
-    estrategia_mutacion = "M1"   # Por defecto
-    estrategia_poda = "P2"       # Por defecto
+    # Estrategias seleccionadas dinámicamente 3 1 1 2
+    estrategia_formacion = "A6"  
+    estrategia_mutacion = "M1"  
+    estrategia_cruce = "C1"      
+    estrategia_poda = "P2"       
 
 
 class Estadisticas:
@@ -67,9 +63,6 @@ class Estadisticas:
     promedio_arreglo = []
     generacion_arreglo = []
 
-# =============================================================================
-#                               LIMPIEZA
-# =============================================================================
 
 def vaciarDatos():
     Data.rango_punto_cruza = 1
@@ -98,9 +91,7 @@ def vaciarDatos():
     Estadisticas.promedio_arreglo = []
     Estadisticas.generacion_arreglo = []
 
-# =============================================================================
-#                      CÁLCULOS DE REPRESENTACIÓN Y FITNESS
-# =============================================================================
+
 
 def calcular_funcion(funcion, valor_x):
     """Evalúa la función simbólica en el valor_x."""
@@ -139,9 +130,6 @@ def calcular_datos():
     Data.rango_numero = 2**Data.num_bits - 1
     Data.rango_punto_cruza = len(bin(Data.rango_numero)[2:])  # Para cruza
 
-# =============================================================================
-#                         GENERACIÓN DE POBLACIÓN
-# =============================================================================
 
 def generar_primer_poblacion():
     """Genera la población inicial de manera aleatoria."""
@@ -158,9 +146,7 @@ def generar_primer_poblacion():
         )
         Data.poblacion_general.append(individuo)
 
-# =============================================================================
-#                     ESTRATEGIAS DE FORMACIÓN DE PAREJAS (A1–A6)
-# =============================================================================
+#parejas
 
 def formacion_A1():
     """
@@ -299,7 +285,6 @@ def formacion_A6():
             parejas.append((ind1, ind2))
     return parejas
 
-# Diccionario de estrategias de formación
 estrategias_formacion = {
     "A1": formacion_A1,
     "A2": formacion_A2,
@@ -309,9 +294,7 @@ estrategias_formacion = {
     "A6": formacion_A6,
 }
 
-# =============================================================================
-#                   ESTRATEGIAS DE CRUZA DE INFORMACIÓN (C1–C3)
-# =============================================================================
+#cruza
 
 def cruce_C1(ind1, ind2):
     """
@@ -360,16 +343,13 @@ def cruce_C3(ind1, ind2):
     nuevo_individuo2 = parte3 + parte2
     return nuevo_individuo1, nuevo_individuo2
 
-# Diccionario de estrategias de cruce
+
 estrategias_cruce = {
     "C1": cruce_C1,
     "C2": cruce_C2,
     "C3": cruce_C3,
 }
-
-# =============================================================================
-#                         ESTRATEGIAS DE MUTACIÓN (M1–M2)
-# =============================================================================
+#mutacion
 
 def mutacion_M1(binario):
     """
@@ -395,15 +375,12 @@ def mutacion_M2(binario):
     binario_separado[i], binario_separado[j] = binario_separado[j], binario_separado[i]
     return "".join(binario_separado)
 
-# Diccionario de estrategias de mutación
 estrategias_mutacion = {
     "M1": mutacion_M1,
     "M2": mutacion_M2,
 }
 
-# =============================================================================
-#                          ESTRATEGIAS DE PODA (P1–P3)
-# =============================================================================
+#poda
 
 def poda_P1():
     """
@@ -487,16 +464,12 @@ def poda_P3():
 
     Data.poblacion_general = nueva_poblacion
 
-# Diccionario de estrategias de poda
 estrategias_poda = {
     "P1": poda_P1,
     "P2": poda_P2,
     "P3": poda_P3,
 }
 
-# =============================================================================
-#                        FUNCIONES DE APOYO (VARIAS)
-# =============================================================================
 
 def eliminar_repetidos(poblacion):
     """
@@ -534,9 +507,6 @@ def guardar_nuevos_individuos(binario1, binario2):
     Data.poblacion_general.append(individuo1)
     Data.poblacion_general.append(individuo2)
 
-# =============================================================================
-#                      CÁLCULO DE ESTADÍSTICAS Y GRÁFICAS
-# =============================================================================
 
 def generar_estadisticas():
     if Data.tipo_problema_value == "Minimizacion":
@@ -557,7 +527,7 @@ def generar_estadisticas():
     Estadisticas.promedio_arreglo.append(Estadisticas.promedio)
     Estadisticas.generacion_arreglo.append(Data.generacion_actual)
 
-    # Gráficas
+    
     valores_x = [individuo.x for individuo in Data.poblacion_general]
     valores_y = [individuo.y for individuo in Data.poblacion_general]
     
@@ -572,7 +542,7 @@ def generar_estadisticas():
         peor_y = min(Data.poblacion_general, key=lambda individuo: individuo.y)
         peor_x = peor_y.x
 
-    # 1) Gráfica de dispersión/función
+
     generar_segunda_grafica(
         valores_x, valores_y,
         mejor_x, mejor_y,
@@ -586,7 +556,7 @@ def generar_estadisticas():
         Data.tipo_problema_value
     )
 
-    # 2) Gráfica de evolución (mejor, peor, promedio)
+
     generar_graficas(
         Estadisticas.mejor_individuo_arreglo,
         Estadisticas.peor_individuo_arreglo,
@@ -595,9 +565,8 @@ def generar_estadisticas():
         Data.num_generaciones
     )
 
-# =============================================================================
-#                       IMPLEMENTACIÓN DEL AG DINÁMICO
-# =============================================================================
+#IMPLEMENTACIÓN DEL AG DINÁMICO
+
 
 def optimizacion():
     """
@@ -642,10 +611,9 @@ def genetic_algorithm(parametros):
     5. Genera estadísticos y gráficas
     6. Muestra mejor individuo
     """
-    # --- 1) Limpiar datos previos ---
+
     vaciarDatos()
     
-    # --- 2) Asigna parámetros ---
     Data.poblacion_inicial = int(parametros.p_inicial)
     Data.poblacion_maxima = int(parametros.p_max)
     Data.resolucion_deseada = float(parametros.res)
@@ -657,27 +625,21 @@ def genetic_algorithm(parametros):
     Data.num_generaciones = int(parametros.num_generaciones)
     Data.funcion = parametros.funcion
 
-    # OPCIONAL: Selección de estrategias desde la interfaz (si lo deseas)
-    # Data.estrategia_formacion = "A3"
-    # Data.estrategia_cruce = "C1"
-    # Data.estrategia_mutacion = "M1"
-    # Data.estrategia_poda = "P2"
     
-    # --- 3) Cálculo de datos y población inicial ---
+    
+    
     calcular_datos()
     generar_primer_poblacion()
 
-    # --- 4) Bucle de Optimización ---
     for generacion in range(1, Data.num_generaciones + 1):
         Data.generacion_actual = generacion
         optimizacion()
         print(f"Generación: {Data.generacion_actual}")
         generar_estadisticas()
 
-    # --- 5) Genera video (o cualquier posproceso) ---
     generar_video(Data.num_generaciones)
 
-    # --- 6) Muestra mejor individuo ---
+
     imprimir_mejor_individuo()
 
 def imprimir_mejor_individuo():

@@ -17,7 +17,7 @@ class DataObject:
 
 
 root = Tk()
-root.title("Genetic algorithms")
+root.title("implementacion algoritmogen")
 
 def on_combobox_change(event):
     selected_value = combobox_var.get()
