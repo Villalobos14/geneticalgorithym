@@ -49,13 +49,13 @@ def save_data():
 
 
 funcion = StringVar()
-funcion.set("(x**3 * sin(x))/100 + x**2 *cos(x)")
+funcion.set("log(abs(x)**3)*cos(x)*sin(x)")
 ttk.Label(mainframe, text="Funcion:").grid(column=1, row=1, sticky=W)
 ttk.Entry(mainframe, textvariable=funcion).grid(column=2, row=1, sticky=W)
 
 
 p_inicial = StringVar()
-p_inicial.set(2)
+p_inicial.set(10)
 ttk.Label(mainframe, text="Población inicial:").grid(column=1, row=2, sticky=W)
 ttk.Spinbox(mainframe, textvariable=p_inicial).grid(column=2, row=2, sticky=W)
 
@@ -64,14 +64,14 @@ ttk.Spinbox(mainframe, textvariable=p_inicial).grid(column=2, row=2, sticky=W)
 
 
 p_max = StringVar()
-p_max.set(4)
+p_max.set(100)
 ttk.Label(mainframe, text="Población máxima:").grid(column=1, row=3, sticky=W)
 ttk.Spinbox(mainframe, textvariable=p_max).grid(column=2, row=3, sticky=W)
 
 
 
 res = StringVar()
-res.set(0.05)
+res.set(0.005)
 ttk.Label(mainframe, text="Resolución:").grid(column=1, row=4, sticky=W)
 ttk.Spinbox(mainframe, textvariable=res).grid(column=2, row=4, sticky=W)
 
@@ -79,7 +79,7 @@ ttk.Spinbox(mainframe, textvariable=res).grid(column=2, row=4, sticky=W)
 
 
 lim_inf = StringVar()
-lim_inf.set(-4)
+lim_inf.set(-200)
 ttk.Label(mainframe, text="Límite inferior:").grid(column=1, row=5, sticky=W)
 ttk.Spinbox(mainframe, textvariable=lim_inf).grid(column=2, row=5, sticky=W)
 
@@ -87,7 +87,7 @@ ttk.Spinbox(mainframe, textvariable=lim_inf).grid(column=2, row=5, sticky=W)
 
 
 lim_sup = StringVar()
-lim_sup.set(4)
+lim_sup.set(500)
 ttk.Label(mainframe, text="Límite superior:").grid(column=1, row=6, sticky=W)
 ttk.Spinbox(mainframe, textvariable=lim_sup).grid(column=2, row=6, sticky=W)
 
@@ -110,7 +110,7 @@ ttk.Spinbox(mainframe, textvariable=prob_gen).grid(column=2, row=8, sticky=W)
 
 
 num_generaciones = StringVar()
-num_generaciones.set(50)
+num_generaciones.set(200)
 ttk.Label(mainframe, text="Número de generaciones:").grid(column=1, row=9, sticky=W)
 ttk.Spinbox(mainframe, textvariable=num_generaciones).grid(column=2, row=9, sticky=W)
 
