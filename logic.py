@@ -337,7 +337,7 @@ def poda_P2():
         Data.poblacion_general = [mejor]
 
 
-#dicionario de estrategias
+#dicionario estrategias
 
 estrategias_formacion = {
     "FormacionAleatorioContiguidad": formacion_aleatorio_contiguidad,
