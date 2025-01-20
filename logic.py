@@ -565,7 +565,7 @@ def generar_estadisticas():
         Data.num_generaciones
     )
 
-#IMPLEMENTACIÓN DEL AG DINÁMICO
+#implementacion
 
 
 def optimizacion():

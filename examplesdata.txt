@@ -102,6 +102,88 @@ log(1+abs(x)**3)*cos(x)-sin(x)*log(2+abs(x)**5)
 
 
 
+CASO DE PRUEBA A
+Función (Python): sin(x)*cos(2*x)
+Población inicial: 6
+Población máxima: 15
+Resolución: 0.05
+Límites: [-6, 6]
+Probabilidad de mutación del individuo: 0.3
+Probabilidad de mutación del gen: 0.2
+Número de generaciones: 40
+Tipo de problema: Maximización
+
+
+CASO DE PRUEBA B
+Función (Python): (log(1+abs(x)**3)*cos(x)) - (sin(x)*log(2+abs(x)**5))
+Población inicial: 5
+Población máxima: 25
+Resolución: 0.1
+Límites: [-5, 5]
+Probabilidad de mutación del individuo: 0.4
+Probabilidad de mutación del gen: 0.3
+Número de generaciones: 60
+Tipo de problema: Minimizacion
+
+
+CASO DE PRUEBA C
+Función (Python): log(0.5 + abs(x))*sin(x) + 3
+Población inicial: 4
+Población máxima: 20
+Resolución: 0.1
+Límites: [-8, 8]
+Probabilidad de mutación del individuo: 0.35
+Probabilidad de mutación del gen: 0.25
+Número de generaciones: 50
+Tipo de problema: Maximización
+
+
+CASO DE PRUEBA D
+Función (Python): sin(x)*cos(x)*log(1+(0.1 + abs(x)**1.4))
+Población inicial: 5
+Población máxima: 15
+Resolución: 0.05
+Límites: [-4, 4]
+Probabilidad de mutación del individuo: 0.32
+Probabilidad de mutación del gen: 0.22
+Número de generaciones: 50
+Tipo de problema: Maximización
+
+
+CASO DE PRUEBA E
+Función (Python): 6*log(0.1 + abs(x)**3) * cos(x**2)
+Población inicial: 8
+Población máxima: 16
+Resolución: 0.05
+Límites: [-6, 6]
+Probabilidad de mutación del individuo: 0.3
+Probabilidad de mutación del gen: 0.2
+Número de generaciones: 40
+Tipo de problema: Minimizacion
+
+
+CASO DE PRUEBA F
+Función (Python): (0.001)*(x**3)*(1-cos(5*x))
+Población inicial: 5
+Población máxima: 20
+Resolución: 0.1
+Límites: [-8, -6]
+Probabilidad de mutación del individuo: 0.5
+Probabilidad de mutación del gen: 0.4
+Número de generaciones: 50
+Tipo de problema: Minimizacion
+
+
+CASO DE PRUEBA G
+Función (Python): (x*cos(x)*sin(x))
+Población inicial: 10
+Población máxima: 20
+Resolución: 0.1
+Límites: [-5, 5]
+Probabilidad de mutación del individuo: 0.5
+Probabilidad de mutación del gen: 0.4
+Número de generaciones: 50
+Tipo de problema: Minimizacion
 
 
 
