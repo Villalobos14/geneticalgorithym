@@ -1,150 +1,78 @@
-from tkinter import *
-from tkinter import ttk
-from logic import genetic_algorithm
-
-class DataObject:
-    def __init__(self, p_inicial, p_max, res, lim_inf, lim_sup, prob_ind, prob_gen,num_generaciones, funcion, tipo_problema):
-        self.p_inicial = p_inicial
-        self.p_max = p_max
-        self.res = res
-        self.lim_inf = lim_inf
-        self.lim_sup = lim_sup
-        self.prob_ind = prob_ind
-        self.prob_gen = prob_gen
-        self.num_generaciones = num_generaciones
-        self.funcion = funcion
-        self.tipo_problema = tipo_problema
+import tkinter as tk
+from tkinter import ttk, filedialog, messagebox
+from logic_regresion import genetic_algorithm_regresion
 
 
-root = Tk()
-root.title("implementacion algoritmogen")
-
-def on_combobox_change(event):
-    selected_value = combobox_var.get()
-    print("Valor seleccionado en el Combobox:", selected_value)
-
-    
-mainframe = ttk.Frame(root, padding="3 3 12 12")
-mainframe.grid(column=0, row=0, sticky=(N, W, E, S))
-for i in range(11):
-    root.rowconfigure(i, weight=1)
-    for j in range(3):
-        mainframe.columnconfigure(j, weight=1) 
+def seleccionar_archivo():
+    """Selecciona un archivo CSV desde un diálogo"""
+    ruta = filedialog.askopenfilename(
+        title="Seleccionar archivo CSV",
+        filetypes=[("Archivo CSV", "*.csv"), ("Todos los archivos", "*.*")]
+    )
+    if ruta:
+        entry_csv.delete(0, tk.END)
+        entry_csv.insert(0, ruta)
 
 
-def save_data():
-    p_inicial_value = p_inicial.get()
-    p_max_value = p_max.get()
-    res_value = res.get()
-    lim_inf_value = lim_inf.get()
-    lim_sup_value = lim_sup.get()
-    prob_ind_value = prob_ind.get()
-    prob_gen_value = prob_gen.get()
-    num_generaciones_value = num_generaciones.get()
-    funcion_value = funcion.get()
-    tipo_problema_value = combobox_var.get()
-    data = DataObject(p_inicial_value, p_max_value, res_value, lim_inf_value, lim_sup_value, prob_ind_value, prob_gen_value, num_generaciones_value, funcion_value, tipo_problema_value)
-    genetic_algorithm(data)        
+def ejecutar_ga():
+    """Ejecuta el algoritmo genético y muestra los resultados"""
+    ruta_csv = entry_csv.get()
+    if not ruta_csv:
+        messagebox.showwarning("Aviso", "Por favor selecciona un archivo CSV primero.")
+        return
+
+    try:
+        params = {
+            "poblacion_inicial": int(spin_p_inicial.get()),
+            "poblacion_maxima": int(spin_p_max.get()),
+            "num_generaciones": int(spin_generaciones.get()),
+            "prob_mutacion_gen": float(spin_prob_gen.get())
+        }
+
+        mejor_mse, mejor_pesos, pesos_sklearn, mse_sklearn = genetic_algorithm_regresion(ruta_csv, params)
+        resultados = (
+            f"Resultados del ajuste de regresión:\n\n"
+            f"Pesos obtenidos por GA: {mejor_pesos}\n"
+            f"Pesos obtenidos por scikit-learn: {pesos_sklearn}\n\n"
+            f"MSE con algoritmo genético: {mejor_mse:.4f}\n"
+            f"MSE con scikit-learn: {mse_sklearn:.4f}"
+        )
+        messagebox.showinfo("Resultados", resultados)
+
+    except Exception as e:
+        messagebox.showerror("Error", f"Hubo un problema: {str(e)}")
 
 
+# Interfaz gráfica (Tkinter)
+root = tk.Tk()
+root.title("GA - Regresión")
 
-funcion = StringVar()
-funcion.set("log(abs(x)**3)*cos(x)*sin(x)")
-ttk.Label(mainframe, text="Funcion:").grid(column=1, row=1, sticky=W)
-ttk.Entry(mainframe, textvariable=funcion).grid(column=2, row=1, sticky=W)
+mainframe = ttk.Frame(root, padding="10 10 10 10")
+mainframe.grid(row=0, column=0, sticky="NSEW")
+root.columnconfigure(0, weight=1)
+root.rowconfigure(0, weight=1)
 
+ttk.Label(mainframe, text="Archivo CSV:").grid(row=0, column=0, sticky="W")
+entry_csv = ttk.Entry(mainframe, width=40)
+entry_csv.grid(row=0, column=1, sticky="WE")
+ttk.Button(mainframe, text="Examinar...", command=seleccionar_archivo).grid(row=0, column=2)
 
-p_inicial = StringVar()
-p_inicial.set(10)
-ttk.Label(mainframe, text="Población inicial:").grid(column=1, row=2, sticky=W)
-ttk.Spinbox(mainframe, textvariable=p_inicial).grid(column=2, row=2, sticky=W)
+ttk.Label(mainframe, text="Población inicial:").grid(row=1, column=0, sticky="W")
+spin_p_inicial = tk.Spinbox(mainframe, from_=10, to=500, width=10)
+spin_p_inicial.grid(row=1, column=1, sticky="W")
 
+ttk.Label(mainframe, text="Población máxima:").grid(row=2, column=0, sticky="W")
+spin_p_max = tk.Spinbox(mainframe, from_=10, to=500, width=10)
+spin_p_max.grid(row=2, column=1, sticky="W")
 
+ttk.Label(mainframe, text="Generaciones:").grid(row=3, column=0, sticky="W")
+spin_generaciones = tk.Spinbox(mainframe, from_=10, to=1000, width=10)
+spin_generaciones.grid(row=3, column=1, sticky="W")
 
+ttk.Label(mainframe, text="Probabilidad de mutación:").grid(row=4, column=0, sticky="W")
+spin_prob_gen = tk.Spinbox(mainframe, from_=0.0, to=1.0, increment=0.01, width=10)
+spin_prob_gen.grid(row=4, column=1, sticky="W")
 
-
-p_max = StringVar()
-p_max.set(100)
-ttk.Label(mainframe, text="Población máxima:").grid(column=1, row=3, sticky=W)
-ttk.Spinbox(mainframe, textvariable=p_max).grid(column=2, row=3, sticky=W)
-
-
-
-res = StringVar()
-res.set(0.005)
-ttk.Label(mainframe, text="Resolución:").grid(column=1, row=4, sticky=W)
-ttk.Spinbox(mainframe, textvariable=res).grid(column=2, row=4, sticky=W)
-
-
-
-
-lim_inf = StringVar()
-lim_inf.set(-200)
-ttk.Label(mainframe, text="Límite inferior:").grid(column=1, row=5, sticky=W)
-ttk.Spinbox(mainframe, textvariable=lim_inf).grid(column=2, row=5, sticky=W)
-
-
-
-
-lim_sup = StringVar()
-lim_sup.set(500)
-ttk.Label(mainframe, text="Límite superior:").grid(column=1, row=6, sticky=W)
-ttk.Spinbox(mainframe, textvariable=lim_sup).grid(column=2, row=6, sticky=W)
-
-
-
-
-
-prob_ind = StringVar()
-prob_ind.set(0.32)
-ttk.Label(mainframe, text="Probabilidad de mutación del individuo:").grid(column=1, row=7, sticky=W)
-ttk.Spinbox(mainframe, textvariable=prob_ind).grid(column=2, row=7, sticky=W)
-
-
-
-
-prob_gen = StringVar()
-prob_gen.set(0.23)
-ttk.Label(mainframe, text="Probabilidad de mutación del gen:").grid(column=1, row=8, sticky=W)
-ttk.Spinbox(mainframe, textvariable=prob_gen).grid(column=2, row=8, sticky=W)
-
-
-num_generaciones = StringVar()
-num_generaciones.set(200)
-ttk.Label(mainframe, text="Número de generaciones:").grid(column=1, row=9, sticky=W)
-ttk.Spinbox(mainframe, textvariable=num_generaciones).grid(column=2, row=9, sticky=W)
-
-
-
-
-# Definir el tipo de problema, si es de maximizacion o de minimizacion 
-ttk.Label(mainframe, text="Tipo de problema:").grid(column=1, row=10, sticky=W)
-combobox_var = StringVar(value="Minimizacion")
-combobox=ttk.Combobox(mainframe, values=["Maximizacion","Minimizacion"],textvariable=combobox_var, state='readonly')
-combobox.grid(column=2, row=10, sticky=W)
-combobox.bind("<<ComboboxSelected>>", on_combobox_change)
-
-
-
-
-ttk.Button(mainframe, text="Calculate", command=save_data).grid(column=3, row=11, sticky=W)
-
-
-for child in mainframe.winfo_children(): 
-    child.grid_configure(padx=15, pady=5)
-
-
-
-root.update()
-
-window_width = root.winfo_reqwidth()
-window_height = root.winfo_reqheight()
-screen_width = root.winfo_screenwidth()
-screen_height = root.winfo_screenheight()
-
-x_coordinate = int((screen_width - window_width) / 2)
-y_coordinate = int((screen_height - window_height) / 2)
-
-root.geometry(f"{window_width}x{window_height}+{x_coordinate}+{y_coordinate}")
+ttk.Button(mainframe, text="Ejecutar GA", command=ejecutar_ga).grid(row=5, column=1, pady=10)
 
 root.mainloop()
