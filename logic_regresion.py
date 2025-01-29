@@ -41,7 +41,7 @@ def genetic_algorithm_regresion(ruta_csv, params):
     """
     # Cargar el dataset
     data = pd.read_csv(ruta_csv, sep=";", header=0)
-    X = data.iloc[:, :-1].values
+    X = data.iloc[:, 1:-1].values
     y = data.iloc[:, -1].values
 
     # Agregar columna de bias (sesgo) en la primera columna
