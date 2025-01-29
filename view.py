@@ -1,83 +1,91 @@
 import tkinter as tk
 from tkinter import ttk, filedialog, messagebox
-from logic_regresion import genetic_algorithm_regresion
+from logic_regresion import genetic_regression
 
 def seleccionar_archivo():
-    """Selecciona un archivo CSV desde un diálogo."""
     ruta = filedialog.askopenfilename(
         title="Seleccionar archivo CSV",
-        filetypes=[("Archivo CSV", "*.csv"), ("Todos los archivos", "*.*")]
+        filetypes=[("Archivo CSV", ".csv"), ("Todos los archivos", ".*")]
     )
     if ruta:
         entry_csv.delete(0, tk.END)
         entry_csv.insert(0, ruta)
 
 def ejecutar_ga():
-    """Ejecuta el algoritmo genético y muestra los resultados."""
     ruta_csv = entry_csv.get()
     if not ruta_csv:
         messagebox.showwarning("Aviso", "Por favor selecciona un archivo CSV primero.")
         return
-
     try:
         params = {
-            "poblacion_inicial": int(spin_p_inicial.get()),
-            "poblacion_maxima": int(spin_p_max.get()),
-            "num_generaciones": int(spin_generaciones.get()),
-            "prob_mutacion_gen": float(spin_prob_gen.get())
+            "popsize": int(spin_p_inicial.get()),
+            "maxpop": int(spin_p_max.get()),
+            "gens": int(spin_generaciones.get()),
+            "mutprob": float(spin_prob_gen.get())
         }
-
-        mejor_mse, mejor_pesos, pesos_sklearn, mse_sklearn = genetic_algorithm_regresion(ruta_csv, params)
-
-        # Mostrar resultados en messagebox
+        bestmse, bestw, weights_sklearn, mse_sklearn = genetic_regression(ruta_csv, params)
+        
         resultados = (
             f"Resultados del ajuste de regresión:\n\n"
-            f"Mejor MSE (GA): {mejor_mse:.6f}\n"
-            f"Pesos obtenidos por GA: {mejor_pesos}\n\n"
-            f"Pesos obtenidos por scikit-learn: {pesos_sklearn}\n"
+            f"Mejor MSE (GA): {bestmse:.6f}\n"
+            f"Pesos obtenidos por GA: {bestw}\n\n"
+            f"Pesos obtenidos por scikit-learn: {weights_sklearn}\n"
             f"MSE con scikit-learn: {mse_sklearn:.6f}\n"
         )
         messagebox.showinfo("Resultados", resultados)
-
     except Exception as e:
         messagebox.showerror("Error", f"Hubo un problema: {str(e)}")
 
-# Interfaz gráfica (Tkinter)
+# Configuración de la ventana principal
 root = tk.Tk()
-root.title("GA - Regresión")
+root.title("Algoritmo Genético - Regresión Lineal")
+root.geometry("600x400")
+root.configure(bg='#f0f0f0')
 
-mainframe = ttk.Frame(root, padding="10 10 10 10")
-mainframe.grid(row=0, column=0, sticky="NSEW")
-root.columnconfigure(0, weight=1)
-root.rowconfigure(0, weight=1)
+# Frame principal
+main_frame = ttk.Frame(root, padding="20")
+main_frame.pack(fill=tk.BOTH, expand=True)
 
-# Etiqueta y campo para seleccionar archivo CSV
-ttk.Label(mainframe, text="Archivo CSV:").grid(row=0, column=0, sticky="W")
-entry_csv = ttk.Entry(mainframe, width=40)
-entry_csv.grid(row=0, column=1, sticky="WE")
-ttk.Button(mainframe, text="Examinar...", command=seleccionar_archivo).grid(row=0, column=2, padx=5)
+# Frame para el archivo
+file_frame = ttk.LabelFrame(main_frame, text="Selección de Archivo", padding="10")
+file_frame.pack(fill=tk.X, pady=(0, 10))
 
-# Población inicial
-ttk.Label(mainframe, text="Población inicial:").grid(row=1, column=0, sticky="W")
-spin_p_inicial = tk.Spinbox(mainframe, from_=10, to=500, width=10)
-spin_p_inicial.grid(row=1, column=1, sticky="W")
+entry_csv = ttk.Entry(file_frame, width=50)
+entry_csv.pack(side=tk.LEFT, padx=(5, 10), fill=tk.X, expand=True)
+ttk.Button(file_frame, text="Examinar...", command=seleccionar_archivo).pack(side=tk.LEFT)
 
-# Población máxima
-ttk.Label(mainframe, text="Población máxima:").grid(row=2, column=0, sticky="W")
-spin_p_max = tk.Spinbox(mainframe, from_=10, to=500, width=10)
-spin_p_max.grid(row=2, column=1, sticky="W")
+# Frame para los parámetros
+params_frame = ttk.LabelFrame(main_frame, text="Parámetros del Algoritmo", padding="10")
+params_frame.pack(fill=tk.BOTH, expand=True)
 
-# Número de generaciones
-ttk.Label(mainframe, text="Generaciones:").grid(row=3, column=0, sticky="W")
-spin_generaciones = tk.Spinbox(mainframe, from_=10, to=1000, width=10)
-spin_generaciones.grid(row=3, column=1, sticky="W")
+# Grid de parámetros
+params = [
+    ("Población inicial:", "spin_p_inicial", 10, 500),
+    ("Población máxima:", "spin_p_max", 10, 500),
+    ("Generaciones:", "spin_generaciones", 10, 1000),
+    ("Probabilidad de mutación:", "spin_prob_gen", 0.0, 1.0, 0.01)
+]
 
-# Probabilidad de mutación
-ttk.Label(mainframe, text="Prob. de mutación:").grid(row=4, column=0, sticky="W")
-spin_prob_gen = tk.Spinbox(mainframe, from_=0.0, to=1.0, increment=0.01, width=10)
-spin_prob_gen.grid(row=4, column=1, sticky="W")
+for i, (label_text, var_name, from_, to, *args) in enumerate(params):
+    ttk.Label(params_frame, text=label_text).grid(row=i, column=0, sticky="W", padx=5, pady=5)
+    if len(args) > 0:  # Para la probabilidad de mutación
+        spinbox = tk.Spinbox(params_frame, from_=from_, to=to, increment=args[0], width=15)
+    else:
+        spinbox = tk.Spinbox(params_frame, from_=from_, to=to, width=15)
+    spinbox.grid(row=i, column=1, sticky="W", padx=5, pady=5)
+    globals()[var_name] = spinbox
 
-# Botón para ejecutar el GA
-ttk.Button(mainframe, text="Ejecutar GA", command=ejecutar_ga).grid(row=5, column=1, pady=10)
+# Frame para el botón de ejecución
+button_frame = ttk.Frame(main_frame)
+button_frame.pack(fill=tk.X, pady=20)
+
+execute_button = ttk.Button(button_frame, text="Ejecutar Algoritmo Genético", command=ejecutar_ga)
+execute_button.pack()
+
+# Estilo
+style = ttk.Style()
+style.configure('TLabel', font=('Arial', 10))
+style.configure('TButton', font=('Arial', 10))
+style.configure('TLabelframe.Label', font=('Arial', 11, 'bold'))
 
 root.mainloop()
